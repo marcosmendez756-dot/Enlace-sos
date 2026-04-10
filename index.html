@@ -3,60 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student SOS Portal</title>
+    <title>JAGUAR_IRIS</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #001f3f; /* Dark Blue */
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
+        :root {
+            --blue: #007aff;
+            --white: #ffffff;
+            --ghost-border: rgba(255, 255, 255, 0.1);
+            --bg: #000;
         }
-        .container {
-            background-color: #000000; /* Dark/Black */
-            padding: 2rem;
-            border-radius: 15px;
-            border: 2px solid #004080; /* Blue accent */
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
+
+        * { box-sizing: border-box; transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+
+        body, html { 
+            margin: 0; padding: 0; height: 100%; 
+            background: var(--bg); color: var(--white); 
+            font-family: 'Inter', sans-serif; overflow: hidden;
         }
-        h1 { color: #3399ff; }
-        textarea {
-            width: 100%;
-            height: 100px;
-            margin: 1rem 0;
-            border-radius: 5px;
-            border: none;
-            padding: 10px;
-            box-sizing: border-box;
+
+        /* --- THE IRIS INTRO --- */
+        #iris-gate {
+            position: fixed; inset: 0; z-index: 10000;
+            background: #000; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
         }
-        button {
-            background-color: #004080;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+
+        .iris-circle {
+            width: 10px; height: 10px; border: 2px solid var(--white);
+            border-radius: 50%; animation: pulse 2s infinite;
             cursor: pointer;
-            font-weight: bold;
         }
-        button:hover { background-color: #0066cc; }
-        .mascot-text { font-style: italic; color: #3399ff; margin-top: 10px; }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(4); opacity: 0; }
+        }
+
+        .boot-label {
+            margin-top: 40px; font-size: 0.6rem; letter-spacing: 8px;
+            color: #444; text-transform: uppercase;
+        }
+
+        /* --- THE PRO DASHBOARD --- */
+        #hub { 
+            display: none; height: 100vh; width: 100vw; 
+            grid-template-columns: 100px 1fr; opacity: 0;
+        }
+
+        /* Minimal Rail */
+        .rail {
+            border-right: 1px solid var(--ghost-border);
+            display: flex; flex-direction: column; align-items: center; padding: 40px 0;
+        }
+        .rail-btn {
+            width: 44px; height: 44px; border: 1px solid var(--ghost-border);
+            border-radius: 50%; margin-bottom: 30px; display: flex;
+            align-items: center; justify-content: center; cursor: pointer;
+            font-size: 0.8rem; font-weight: 900;
+        }
+        .rail-btn:hover { border-color: var(--white); background: var(--white); color: #000; }
+
+        /* Viewport */
+        .viewport { padding: 80px; overflow-y: auto; }
+        
+        header { display: flex; justify-content: space-between; align-items: flex-start; }
+        h1 { font-size: 5rem; font-weight: 100; margin: 0; letter-spacing: -4px; }
+        .sub-head { color: var(--blue); font-weight: 800; font-size: 0.7rem; letter-spacing: 3px; }
+
+        /* New Tech Bento */
+        .grid {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 15px; margin-top: 60px;
+        }
+
+        .bento-block {
+            background: rgba(255,255,255,0.02); border: 1px solid var(--ghost-border);
+            border-radius: 20px; padding: 35px; backdrop-filter: blur(10px);
+        }
+        .bento-block:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); }
+
+        .span-2 { grid-column: span 2; }
+        .span-3 { grid-column: span 3; }
+
+        /* Inputs & Buttons */
+        .ghost-in {
+            background: transparent; border: none; border-bottom: 1px solid #222;
+            color: #fff; width: 100%; padding: 15px 0; outline: none;
+            font-size: 1.2rem; margin-top: 20px;
+        }
+        .btn-ghost {
+            background: transparent; border: 1px solid var(--white); color: var(--white);
+            padding: 12px 25px; border-radius: 100px; cursor: pointer;
+            font-weight: 800; font-size: 0.7rem; letter-spacing: 1px;
+        }
+        .btn-ghost:hover { background: var(--white); color: #000; }
+
+        /* The Hide Protocol */
+        .hide-trigger { float: right; cursor: pointer; opacity: 0.2; font-size: 0.6rem; }
+        .hide-trigger:hover { opacity: 1; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Student SOS</h1>
-        <p>The Jaguar is listening. How can we help?</p>
-        <textarea placeholder="Type your message here..."></textarea>
-        <br>
-        <button onclick="alert('Message sent to the Social Worker!')">Send SOS</button>
-        <p class="mascot-text">🐾 Dark Spot Jaguar Protection Active</p>
-    </div>
+
+<div id="iris-gate" onclick="startBoot()">
+    <div class="iris-circle"></div>
+    <div class="boot-label">Initialize_Jaguar</div>
+</div>
+
+<div id="hub">
+    <aside class="rail">
+        <div class="rail-btn">J</div>
+        <div class="rail-btn" onclick="toggleMenu()">☰</div>
+        <div class="rail-btn" style="margin-top: auto;" onclick="location.reload()">↺</div>
+    </aside>
+
+    <main class="viewport">
+        <header>
+            <div>
+                <div class="sub-head">STATION_ACTIVE</div>
+                <h1 id="operator-name">SYSTEM</h1>
+            </div>
+            <div id="clock" style="font-size: 1.5rem; font-weight: 200;">00:00</div>
+        </header>
+
+        <div class="grid">
+            <div class="bento-block span-3">
+                <span class="hide-trigger" onclick="this.parentElement.style.display='none'">[X] HIDE</span>
+                <div class="sub-head" style="color:#555">STATUS_REPORT</div>
+                <h2 style="font-weight: 200; font-size: 1.8rem; margin-top: 20px;">The Indianapolis node is secure. Enlace Academy protocol active.</h2>
+            </div>
+
+            <div class="bento-block">
+                <div class="sub-head" style="color:#555">GRADE</div>
+                <div style="font-size: 3rem; font-weight: 100;">7TH</div>
+            </div>
+
+            <div class="bento-block span-2">
+                <div class="sub-head">GOALS</div>
+                <input type="text" id="taskInput" onkeypress="addTask(event)" class="ghost-in" placeholder="New parameter...">
+                <div id="taskList" style="margin-top: 20px;"></div>
+            </div>
+
+            <div class="bento-block span-2" style="border-color: #ff3b30;">
+                <div class="sub-head" style="color: #ff3b30;">SOS_SIGNAL</div>
+                <p style="color: #444; font-size: 0.8rem; margin: 20px 0;">Direct priority alert to Academy Social Worker node.</p>
+                <button class="btn-ghost" style="border-color:#ff3b30; color:#ff3b30;" onclick="alert('Priority SOS Sent')">DISPATCH</button>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    function startBoot() {
+        const name = prompt("IDENTIFY OPERATOR:");
+        if(!name) return;
+        
+        document.getElementById('operator-name').innerText = name.toUpperCase();
+        document.getElementById('iris-gate').style.transform = "scale(5)";
+        document.getElementById('iris-gate').style.opacity = "0";
+        
+        setTimeout(() => {
+            document.getElementById('iris-gate').style.display = "none";
+            document.getElementById('hub').style.display = "grid";
+            setTimeout(() => document.getElementById('hub').style.opacity = "1", 50);
+        }, 600);
+    }
+
+    function addTask(e) {
+        if(e.key === 'Enter') {
+            const val = e.target.value;
+            if(!val) return;
+            const div = document.createElement('div');
+            div.style = "padding: 10px 0; border-bottom: 1px solid #111; display:flex; justify-content:space-between; font-size: 0.8rem;";
+            div.innerHTML = `<span>> ${val.toUpperCase()}</span><span style="color:var(--blue); cursor:pointer;" onclick="this.parentElement.remove()">[REMOVE]</span>`;
+            document.getElementById('taskList').prepend(div);
+            e.target.value = "";
+        }
+    }
+
+    setInterval(() => {
+        document.getElementById('clock').innerText = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', hour12: false});
+    }, 1000);
+</script>
+
 </body>
 </html>
